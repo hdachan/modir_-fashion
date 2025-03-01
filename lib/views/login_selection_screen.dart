@@ -37,7 +37,7 @@ class _login_totalscreen extends State<login_total_screen>
                         CustomInkWell(
                           context: context, // 현재 context를 전달
                           imagePath: 'assets/image/goole_icon.svg',
-                          targetScreen: login_screen(), // LoginScreen으로 이동
+                          targetScreen: LoginScreen(), // LoginScreen으로 이동
                         ),
                         SizedBox(height: 16.h),
                         CustomInkWell(

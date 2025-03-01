@@ -89,50 +89,95 @@ Widget CustomInkWell({required BuildContext context, required String imagePath, 
   );
 }
 
-Widget CustomloginAppBar(
-    {required String title, required BuildContext context}) {
-  return LayoutBuilder(
-    builder: (context, constraints) {
-      return Container(
-        width: double.infinity,
-        height: 56.h,
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                width: ResponsiveUtils.getResponsiveWidth(56, 360, constraints),
-                height: 56.h,
-                child: Center(
+
+class LoginOptionsRow extends StatefulWidget {
+  const LoginOptionsRow({Key? key}) : super(key: key);
+
+  @override
+  _LoginOptionsRowState createState() => _LoginOptionsRowState();
+}
+
+class _LoginOptionsRowState extends State<LoginOptionsRow> {
+  bool isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          width: double.infinity,
+          height: 24.h,
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    isChecked = !isChecked;
+                  });
+                },
+                child: Container(
+                  width: ResponsiveUtils.getResponsiveWidth(24, 360, constraints),
+                  height: 24.h,
                   child: Icon(
-                    Icons.chevron_left,
+                    isChecked ? Icons.check : Icons.check_box_outline_blank,
+                    color: isChecked ? const Color(0xFF888888) : Colors.grey,
                     size: 24.sp,
-                    color: Colors.white,
                   ),
                 ),
               ),
-            ),
-            Container(
-              width: ResponsiveUtils.getResponsiveWidth(248, 360, constraints),
-              height: 56.h,
-              alignment: Alignment.centerLeft, // 텍스트를 왼쪽 중앙에 정렬
-              child: Text(
-                title, // 전달받은 텍스트 사용
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.sp,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w700,
-                  height: 1.40.h,
-                  letterSpacing: -0.50,
+              const SizedBox(width: 8),
+              Container(
+                width: ResponsiveUtils.getResponsiveWidth(131, 360, constraints),
+                height: 20.h,
+                child: Text(
+                  '자동 로그인',
+                  style: TextStyle(
+                    color: const Color(0xFF888888),
+                    fontSize: 14.sp,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w500,
+                    height: 1.40,
+                    letterSpacing: -0.35,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      );
-    },
-  );
+              const SizedBox(width: 8),
+              Container(
+                width: ResponsiveUtils.getResponsiveWidth(70, 360, constraints),
+                height: 20.h,
+                child: Text(
+                  '아이디 찾기',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.sp,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w500,
+                    height: 1.40,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Container(
+                width: ResponsiveUtils.getResponsiveWidth(77, 360, constraints),
+                height: 20.h,
+                child: Text(
+                  '비밀번호 찾기',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.sp,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w500,
+                    height: 1.40,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

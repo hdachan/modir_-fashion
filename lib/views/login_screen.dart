@@ -1,72 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
-import '../utils/constants.dart';
+import '../../utils/designSize.dart';
+import '../viewmodels/login_viewmodel.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_field.dart';
+import '../widgets/cutstom_appbar.dart';
 import '../widgets/login_item.dart';
+import 'home_screen.dart';
 
-class login_screen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
-  _login_screen createState() => _login_screen();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _login_screen extends State<login_screen>
-    with SingleTickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _isTextFieldEmpty = true;
 
-  @override
-  void initState() {
-    super.initState();
-    // 텍스트 변경 리스너 추가
-    _emailController.addListener(() {
-      setState(() {
-        _isTextFieldEmpty = _emailController.text.isEmpty;
-      });
-    });
+  // 로그인 버튼 클릭 시 뷰모델의 로그인 메서드를 호출
+  Future<void> _handleSignIn() async {
+    final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+    final errorMessage = await authViewModel.signIn(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
+    if (errorMessage == null) {
+      // 로그인 성공 시
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('로그인 성공!')),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else {
+      // 에러 메시지 표시
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+    }
   }
 
   @override
   void dispose() {
     _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
-  }
-
-
-
-
-  bool isChecked = false; // 체크 상태를 저장하는 변수
-
-  bool _obscureText = true; // 비밀번호 숨김 상태
-
-  void _togglePasswordVisibility() {
-    setState(() {
-      _obscureText = !_obscureText; // 비밀번호 숨김 상태 토글
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    initScreenUtil(context); // designSize.dart의 초기화 함수
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Color(0xFF1A1A1A),
+      backgroundColor: const Color(0xFF1A1A1A),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: 600, // 최대 너비를 600px로 제한
-              ),
+              constraints: const BoxConstraints(maxWidth: 600),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CustomloginAppBar(title: '로그인', context: context),
+                  SizedBox(height: 20.h),
+                  CustomEmailField(controller: _emailController),
+                  CustomPasswordField(controller: _passwordController),
+                  SizedBox(height: 24.h),
+                  LoginOptionsRow(),
                 ],
               ),
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: LoginButton(
+        buttonText: '로그인',
+        onTap: _handleSignIn,
       ),
     );
   }
