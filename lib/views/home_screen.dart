@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../viewmodels/setting_viewmodel.dart';
 import '../../utils/designSize.dart';
 import 'Mypage.dart';
+import 'home_navermap_screen.dart';
 import 'test.dart'; // MYPage 파일 import
 
 class HomeScreen extends StatelessWidget {
@@ -34,8 +35,8 @@ class HomeScreen extends StatelessWidget {
                         }
                       },
                       children: [
+                        NaverMapBackground(),
                         mmmm(),
-                        const Center(child: Text("탭 2")),
                         const Center(child: Text("탭 3")),
                         const Center(child: Text("탭 4")),
                         MYPage(key: _myPageKey),
