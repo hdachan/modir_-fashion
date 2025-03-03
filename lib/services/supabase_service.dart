@@ -1,5 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../models/modir.dart';
+
 class SupabaseService {
   final client = Supabase.instance.client;
 
@@ -26,5 +28,32 @@ class SupabaseService {
       password: password,
     );
     return response.user;
+  }
+
+
+  final SupabaseClient supabase = Supabase.instance.client;
+
+  // modir 데이터 가져오기
+  Future<List<Modir>> fetchModirData() async {
+    try {
+      final response = await supabase.from('modir').select();
+      return (response as List<dynamic>)
+          .map((json) => Modir.fromJson(json))
+          .toList();
+    } catch (error) {
+      print('Error fetching modir data: $error');
+      throw error;
+    }
+  }
+
+  // 실시간 구독 설정
+  RealtimeChannel setupRealtimeSubscription(
+      String channelName, Function(PostgresChangePayload) callback) {
+    return supabase.channel(channelName).onPostgresChanges(
+      event: PostgresChangeEvent.all,
+      schema: 'public',
+      table: 'modir',
+      callback: callback,
+    ).subscribe();
   }
 }

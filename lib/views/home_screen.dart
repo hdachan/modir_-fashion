@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                         }
                       },
                       children: [
-                        NaverMapBackground(),
+                        MapScreen(),
                         mmmm(),
                         const Center(child: Text("탭 3")),
                         const Center(child: Text("탭 4")),
